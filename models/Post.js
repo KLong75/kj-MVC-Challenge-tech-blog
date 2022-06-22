@@ -13,10 +13,12 @@ class Post extends Model {
         },
         attributes: [
           'id',
-          'post_url',
-          'title',
+          'post_title',
+          'post_text',
+          'post_link',
           'created_at',
-          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id)'), 'vote_count']
+          'user_id',
+          [sequelize.literal('(SELECT COUNT(*) FROM highfive WHERE post.id = highfive.post_id)'), 'highfive_count']
         ],
         include: [
           {
@@ -42,13 +44,17 @@ Post.init(
       primaryKey: true,
       autoIncrement: true
     },
-    title: {
+    post_title: {
       type: DataTypes.STRING,
       allowNull: false
     },
     post_text: {
       type: DataTypes.TEXT,
       allowNull: false,
+    },
+    post_link: {
+      type: DataTypes.STRING,
+      allowNull: true,
       validate: {
         isURL: true
       }
